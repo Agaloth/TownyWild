@@ -18,28 +18,28 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
 
     public TownyWildPlaceholderExpansion() {
     }
+    Map<UUID, Integer> timeCounter = new HashMap<>();
 
     public long getRemainingProtectionTime(Player player) {
-        Map<UUID, Integer> timeCounter = new HashMap<>();
-        final UUID uuid = Bukkit.getPlayer(uuid);
         long remainingTime = 15;
         if (TownyWildTownEventListener.scheduledRemovalTimes.containsKey(player.getUniqueId())) {
             Plugin plugin = Bukkit.getPluginManager().getPlugin(getPlugin());
             assert plugin != null;
             new BukkitRunnable() {
-                long remainingTime = 15;
+                int remainingTime = 15;
 
                 @Override
                 public void run() {
                     this.remainingTime--;
+                    timeCounter.put(player.getUniqueId(), remainingTime);
                     if (remainingTime == 0) {
                         cancel();
-                        timeCounter.put(uuid, (int) remainingTime);
+                        timeCounter.remove(player.getUniqueId());
                     }
                 }
             }.runTaskTimer(plugin, 20, 20);
         }
-            return timeCounter.get(remainingTime);
+            return timeCounter.get(player.getUniqueId());
         }
 
 
@@ -109,12 +109,11 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String identifier) {
         if (identifier.equals("countdown")) {
             long remainingProtectionTime = getRemainingProtectionTime((Player) player);
-            long remainingProtectionTimeInSeconds = getRemainingProtectionTime((Player) player);
-            if (remainingProtectionTimeInSeconds > 60) {
-                long remainingProtectionTimeInMinutes = TimeUnit.SECONDS.toMinutes(remainingProtectionTimeInSeconds);
+            if (remainingProtectionTime > 60) {
+                long remainingProtectionTimeInMinutes = TimeUnit.SECONDS.toMinutes(remainingProtectionTime);
                 return Long.toString(remainingProtectionTimeInMinutes) + " minutes";
             } else {
-                return Long.toString(remainingProtectionTimeInSeconds) + " seconds";
+                return Long.toString(remainingProtectionTime) + " seconds";
             }
             }
             return "";
