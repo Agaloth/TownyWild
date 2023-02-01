@@ -1,0 +1,23 @@
+name: TownyWild
+version: '${project.version}'
+main: com.agaloth.townywild.TownyWild
+api-version: 1.19
+authors: [ Agaloth ]
+website: 'http://townyadvanced.github.io'
+depend: [Towny]
+softdepend: [PlaceholderAPI]
+
+description: A protection plugin for Towny that provides players with protection in the wilderness for a set amount of time.
+
+commands:
+  townywildadmin:
+    aliases: [twa]
+  townywildtest:
+    aliases: [twt]
+
+permissions:
+  townywild.admin:
+    description: User is able to use all TownyWild admin commands.
+    default: op
+    children:
+      townywild.admin.command.*: true
