@@ -11,8 +11,11 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
+
+import static com.agaloth.townywild.settings.Settings.getConfig;
 
 public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
 
@@ -21,25 +24,24 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     Map<UUID, Integer> timeCounter = new HashMap<>();
 
     public long getRemainingProtectionTime(Player player) {
-        long remainingTime = 15;
         if (TownyWildTownEventListener.scheduledRemovalTimes.containsKey(player.getUniqueId())) {
             Plugin plugin = Bukkit.getPluginManager().getPlugin(getPlugin());
             assert plugin != null;
             new BukkitRunnable() {
-                int remainingTime = 15;
+                int remainingTime = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border"))));
 
                 @Override
                 public void run() {
-                    this.remainingTime--;
                     timeCounter.put(player.getUniqueId(), remainingTime);
-                    if (remainingTime == 0) {
+                    this.remainingTime--;
+                    if (remainingTime < 0) {
                         cancel();
                         timeCounter.remove(player.getUniqueId());
                     }
                 }
-            }.runTaskTimer(plugin, 20, 20);
+            }.runTaskTimer(plugin, 0, 20);
         }
-            return timeCounter.get(player.getUniqueId());
+            return timeCounter.getOrDefault(player.getUniqueId(), 0);
         }
 
 
@@ -108,12 +110,12 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     @Override
     public String onRequest(OfflinePlayer player, String identifier) {
         if (identifier.equals("countdown")) {
-            long remainingProtectionTime = getRemainingProtectionTime((Player) player);
-            if (remainingProtectionTime > 60) {
-                long remainingProtectionTimeInMinutes = TimeUnit.SECONDS.toMinutes(remainingProtectionTime);
+            long remainingProtectionTimeInSeconds = getRemainingProtectionTime((Player) player);
+            if (remainingProtectionTimeInSeconds > 60) {
+                long remainingProtectionTimeInMinutes = TimeUnit.SECONDS.toMinutes(remainingProtectionTimeInSeconds);
                 return Long.toString(remainingProtectionTimeInMinutes) + " minutes";
             } else {
-                return Long.toString(remainingProtectionTime) + " seconds";
+                return Long.toString(remainingProtectionTimeInSeconds) + " seconds";
             }
             }
             return "";
