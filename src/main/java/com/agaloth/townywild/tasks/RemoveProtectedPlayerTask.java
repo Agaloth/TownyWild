@@ -1,33 +1,44 @@
 package com.agaloth.townywild.tasks;
 
-import java.util.Map;
-import java.util.Set;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import java.util.UUID;
-import org.bukkit.scheduler.BukkitTask;
 
-public class RemoveProtectedPlayerTask implements Runnable {
+import static com.agaloth.townywild.listeners.TownyWildTownEventListener.protectedPlayers;
+import static com.agaloth.townywild.listeners.TownyWildTownEventListener.protectionTimeLeft;
+
+public class RemoveProtectedPlayerTask {
     private final UUID uuid;
-    private final Set<UUID> protectedPlayers;
-    private final Map<UUID, Long> scheduledRemovalTimes;
-    private BukkitTask progressUpdaterTask;
 
-    public RemoveProtectedPlayerTask(UUID uuid, Set<UUID> protectedPlayers, Map<UUID, Long> scheduledRemovalTimes) {
+    public RemoveProtectedPlayerTask(UUID uuid) {
+
         this.uuid = uuid;
-        this.protectedPlayers = protectedPlayers;
-        this.scheduledRemovalTimes = scheduledRemovalTimes;
     }
 
-    public void cancelProgressUpdater() {
-        if (progressUpdaterTask != null) {
-            progressUpdaterTask.cancel();
+    public void protectionTimeLeft() {
+        if (protectionTimeLeft.containsKey(uuid)) {
+            Plugin plugin = Bukkit.getPluginManager().getPlugin(this.toString());
+            assert plugin != null;
+            new BukkitRunnable() {
+
+                int remainingTime = 15;
+
+                public void updateProtectionTime() {
+                    protectedPlayers.add(uuid);
+                    this.remainingTime--;
+                    if (remainingTime < 0) {
+                        protectedPlayers.remove(uuid);
+                        cancel();
+                    }
+                }
+                @Override
+                public void run() {
+                    updateProtectionTime();
+                }
+            }.runTaskTimer(plugin, 20, 20);
         }
-    }
-
-    public void run() {
-        cancelProgressUpdater();
-        return;
+        protectionTimeLeft.getOrDefault(uuid, 0);
     }
 }
-
-
-
