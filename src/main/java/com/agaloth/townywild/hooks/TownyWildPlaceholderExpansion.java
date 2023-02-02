@@ -1,6 +1,7 @@
 package com.agaloth.townywild.hooks;
 
 import com.agaloth.townywild.listeners.TownyWildTownEventListener;
+import com.google.common.cache.CacheBuilder;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
@@ -24,7 +25,7 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     Map<UUID, Integer> timeCounter = new HashMap<>();
 
     public long getRemainingProtectionTime(Player player) {
-        if (TownyWildTownEventListener.scheduledRemovalTimes.containsKey(player.getUniqueId())) {
+        if (TownyWildTownEventListener.protectionTimeLeft.containsKey(player.getUniqueId())) {
             Plugin plugin = Bukkit.getPluginManager().getPlugin(getPlugin());
             assert plugin != null;
             new BukkitRunnable() {
