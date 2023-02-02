@@ -24,7 +24,10 @@ public class TownyWild extends JavaPlugin {
         // Plugin startup logic
         plugin = this;
         ASCIIArt();
+
+        // Registers the events from the TownyWildTownEventListener class.
         Bukkit.getServer().getPluginManager().registerEvents(new TownyWildTownEventListener(this), this);
+
         // PlaceholderAPI Check
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
             try{
@@ -36,6 +39,7 @@ public class TownyWild extends JavaPlugin {
                 e.printStackTrace();
             }
         }
+
         // Towny Check
         try {
             if (townyVersionCheck(getTownyVersion())) {
@@ -56,16 +60,19 @@ public class TownyWild extends JavaPlugin {
             info("TownyWild did not start correctly.");
         }
     }
+
     // Towny Version Check
     private boolean townyVersionCheck(String version) {
         return Version.fromString(version).compareTo(requiredTownyVersion) >= 0;
     }
 
+    // Registers the TownyWildAdmin command (used for reloading)
     private void registerCommands() {
         getCommand("townywildadmin").setExecutor(new TownyWildAdminCommand());
         getCommand("townywildtest").setExecutor(new TownyWildTestCommand());
     }
 
+    // Gets Towny's version
     private String getTownyVersion() {
 
         return Towny.getPlugin().getDescription().getVersion();
