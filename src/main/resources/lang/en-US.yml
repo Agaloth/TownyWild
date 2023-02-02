@@ -29,3 +29,5 @@ msg_err_command_disable: '&cYou don''t have enough permissions for that command.
 admin_help_reload: 'Reload the config and language files.'
 config_and_lang_file_reloaded_successfully: '&fConfig and Language files reloaded successfully.'
 config_and_lang_file_could_not_be_reloaded: '&fReload unsuccessful. Check console for more details.'
+attacking_player_message: '&eYou cannot attack an innocent person while he''s on cooldown!'
+victim_player_message: '&eYou cannot attack an enemy while on cooldown!'
