@@ -6,6 +6,8 @@ import static com.agaloth.townywild.TownyWild.plugin;
 import com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion;
 import com.agaloth.townywild.tasks.RemoveProtectedPlayerTask;
 import com.agaloth.townywild.utils.Messaging;
+
+import static com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion.protectionExpirationTime;
 import static com.agaloth.townywild.settings.Settings.getConfig;
 
 import com.google.common.cache.AbstractCache;
@@ -31,6 +33,7 @@ import java.util.Objects;
 public class TownyWildTownEventListener implements Listener {
     public static Set<UUID> protectedPlayers = new HashSet<>();
     private final Map<UUID, BukkitTask> removeProtectedPlayerTask = new HashMap<>();
+    private UUID uuid;
 
     public TownyWildTownEventListener(TownyWild instance) {
 
@@ -59,23 +62,24 @@ public class TownyWildTownEventListener implements Listener {
 
     @EventHandler
     public void ExitTownBorder(PlayerExitsFromTownBorderEvent event) {
-        // Gets a player's UUID.
-        UUID uuid = event.getPlayer().getUniqueId();
         System.out.println("Player just exited the town border");
-
-        // Adds a player's UUID to the protectedPlayers list when exiting a town.
-        protectedPlayers.add(event.getPlayer().getUniqueId());
 
         // Gets the remaining time from the config file
         int remainingTime = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border"))));
 
+        // Add player to the hashmap storing expiration times.
+        protectionExpirationTime.put(event.getPlayer(), (long) remainingTime*1000L);
+
         // Runs a Bukkit scheduler to remove the player from the protectedPlayers hashmap
-        BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, new RemoveProtectedPlayerTask(uuid), remainingTime*20L);
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, () -> removePlayerIfExpired(event.getPlayer()), remainingTime*20L);
+    }
+    public void removePlayerIfExpired(Player player)
+    {
+        // Removes a player from the protectedPlayers hashmap.
+        protectedPlayers.remove(uuid);
 
-        // Adds the Bukkit task to a hashmap to cancel it when a player enters a town.
-        removeProtectedPlayerTask.put(uuid, task);
-
-        System.out.println("protectedPlayers after adding player: " + protectedPlayers);
+        // Sends a message to the protected player telling them that their protection has ended.
+        Messaging.sendMsg(player, Translatable.of("player_protection_ended"));
     }
 
     @EventHandler
