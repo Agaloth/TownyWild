@@ -20,7 +20,10 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     }
 
     public long getRemainingProtectionTime(Player player) {
-        return protectionExpirationTime.get(player.getPlayer()) - System.currentTimeMillis();
+        long now = System.currentTimeMillis();
+        long expireTime = protectionExpirationTime.getOrDefault(player, now);
+        long secondsRemaining = (expireTime - now) / 1000;
+        return secondsRemaining;
     }
 
     public long setRemainingProtectionTime(Player player) {
@@ -31,9 +34,8 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
 
                 @Override
                 public void run() {
-                    protectionExpirationTime.put(player.getPlayer(), expireTime);
                     if (System.currentTimeMillis() >= expireTime) {
-                        protectionExpirationTime.remove(player.getPlayer(), expireTime);
+                        protectionExpirationTime.remove(player, expireTime);
                     }
 
                 }
