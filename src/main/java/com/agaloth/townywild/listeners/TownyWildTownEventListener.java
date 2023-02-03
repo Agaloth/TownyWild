@@ -7,12 +7,17 @@ import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.scheduler.BukkitTask;
 
 import java.util.*;
 
+import static com.agaloth.townywild.TownyWild.getPlugin;
+import static com.agaloth.townywild.TownyWild.plugin;
 import static com.agaloth.townywild.settings.Settings.getConfig;
 
 public class TownyWildTownEventListener implements Listener {
@@ -52,8 +57,7 @@ public class TownyWildTownEventListener implements Listener {
 
         // Adds a player's UUID to the protectedPlayers list when exiting a town.
         protectedPlayers.add(event.getPlayer().getUniqueId());
-        RemoveProtectedPlayerTask protectionTimeLeft = new RemoveProtectedPlayerTask(uuid);
-        protectionTimeLeft.protectionTimeLeft();
+        Bukkit.getScheduler().runTaskTimer(plugin, new RemoveProtectedPlayerTask(uuid), 0, 20);
         System.out.println(protectionTimeLeft + " seconds left of protection");
         System.out.println("protectedPlayers after adding player: " + protectedPlayers);
     }
