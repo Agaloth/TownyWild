@@ -1,28 +1,36 @@
 package com.agaloth.townywild.listeners;
 
 import com.agaloth.townywild.TownyWild;
+import static com.agaloth.townywild.TownyWild.plugin;
+
+import com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion;
 import com.agaloth.townywild.tasks.RemoveProtectedPlayerTask;
 import com.agaloth.townywild.utils.Messaging;
+import static com.agaloth.townywild.settings.Settings.getConfig;
+
+import com.google.common.cache.AbstractCache;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
+
 import org.bukkit.Bukkit;
+import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
-
-import static com.agaloth.townywild.TownyWild.getPlugin;
-import static com.agaloth.townywild.TownyWild.plugin;
-import static com.agaloth.townywild.settings.Settings.getConfig;
+import java.util.Set;
+import java.util.HashSet;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.Objects;
 
 public class TownyWildTownEventListener implements Listener {
     public static Set<UUID> protectedPlayers = new HashSet<>();
-    public static Map<UUID, Integer> protectionTimeLeft = new HashMap<>();
+    private final Map<UUID, BukkitTask> removeProtectedPlayerTask = new HashMap<>();
 
     public TownyWildTownEventListener(TownyWild instance) {
 
@@ -57,8 +65,16 @@ public class TownyWildTownEventListener implements Listener {
 
         // Adds a player's UUID to the protectedPlayers list when exiting a town.
         protectedPlayers.add(event.getPlayer().getUniqueId());
-        Bukkit.getScheduler().runTaskTimer(plugin, new RemoveProtectedPlayerTask(uuid), 0, 20);
-        System.out.println(protectionTimeLeft + " seconds left of protection");
+
+        // Gets the remaining time from the config file
+        int remainingTime = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border"))));
+
+        // Runs a Bukkit scheduler to remove the player from the protectedPlayers hashmap
+        BukkitTask task = Bukkit.getScheduler().runTaskLater(plugin, new RemoveProtectedPlayerTask(uuid), remainingTime*20L);
+
+        // Adds the Bukkit task to a hashmap to cancel it when a player enters a town.
+        removeProtectedPlayerTask.put(uuid, task);
+
         System.out.println("protectedPlayers after adding player: " + protectedPlayers);
     }
 
@@ -67,6 +83,11 @@ public class TownyWildTownEventListener implements Listener {
         // Gets a player's UUID
         UUID uuid = event.getPlayer().getUniqueId();
         System.out.println("Player just entered the town border");
+
+        // Gets the Bukkit task and cancels it.
+        if (removeProtectedPlayerTask.containsKey(uuid)) {
+            removeProtectedPlayerTask.get(uuid).cancel();
+        }
 
         // Removes a player's UUID from the protectedPlayers list when entering a town
         protectedPlayers.remove(event.getPlayer().getUniqueId());
