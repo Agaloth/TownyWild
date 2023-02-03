@@ -1,49 +1,45 @@
 package com.agaloth.townywild.hooks;
 
-import com.agaloth.townywild.listeners.TownyWildTownEventListener;
-import com.google.common.cache.CacheBuilder;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
-import static com.agaloth.townywild.settings.Settings.getConfig;
+import static com.agaloth.townywild.TownyWild.plugin;
 
 public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
+    public static Map<Player, Long> protectionExpirationTime = new HashMap<>();
 
     public TownyWildPlaceholderExpansion() {
     }
-    Map<UUID, Integer> timeCounter = new HashMap<>();
 
     public long getRemainingProtectionTime(Player player) {
-        if (TownyWildTownEventListener.protectionTimeLeft.containsKey(player.getUniqueId())) {
-            Plugin plugin = Bukkit.getPluginManager().getPlugin(getPlugin());
-            assert plugin != null;
+        return protectionExpirationTime.get(player.getPlayer()) - System.currentTimeMillis();
+    }
+
+    public long setRemainingProtectionTime(Player player) {
+        long expireTime = System.currentTimeMillis() + (5 * 1000);
+
+            // Creates a new Bukkit runTaskTimer runnable
             new BukkitRunnable() {
-                int remainingTime = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border"))));
 
                 @Override
                 public void run() {
-                    timeCounter.put(player.getUniqueId(), remainingTime);
-                    this.remainingTime--;
-                    if (remainingTime < 0) {
-                        cancel();
-                        timeCounter.remove(player.getUniqueId());
+                    protectionExpirationTime.put(player.getPlayer(), expireTime);
+                    if (System.currentTimeMillis() >= expireTime) {
+                        protectionExpirationTime.remove(player.getPlayer(), expireTime);
                     }
+
                 }
-            }.runTaskTimer(plugin, 0, 20);
-        }
-            return timeCounter.getOrDefault(player.getUniqueId(), 0);
-        }
+            }.runTaskLater(plugin, 5*20);
+        return expireTime;
+    }
 
 
     /**
