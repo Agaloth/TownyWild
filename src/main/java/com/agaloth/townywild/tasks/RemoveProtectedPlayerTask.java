@@ -9,7 +9,7 @@ import java.util.UUID;
 import static com.agaloth.townywild.listeners.TownyWildTownEventListener.protectedPlayers;
 import static com.agaloth.townywild.listeners.TownyWildTownEventListener.protectionTimeLeft;
 
-public class RemoveProtectedPlayerTask {
+public class RemoveProtectedPlayerTask implements Runnable {
     private final UUID uuid;
 
     public RemoveProtectedPlayerTask(UUID uuid) {
@@ -40,5 +40,10 @@ public class RemoveProtectedPlayerTask {
             }.runTaskTimer(plugin, 20, 20);
         }
         protectionTimeLeft.getOrDefault(uuid, 0);
+    }
+
+    @Override
+    public void run() {
+        protectionTimeLeft();
     }
 }
