@@ -12,12 +12,10 @@ description: A protection plugin for Towny that provides players with protection
 commands:
   townywildadmin:
     aliases: [twa]
-  townywildtest:
-    aliases: [twt]
 
 permissions:
-  townywild.admin:
-    description: User is able to use all TownyWild admin commands.
+  townywild.reload:
+    description: The user is able to reload the TownyWild plugin with this permission.
     default: op
     children:
-      townywild.admin.command.*: true
+      townywild.reload: true
