@@ -31,3 +31,4 @@ config_and_lang_file_reloaded_successfully: '&fConfig and Language files reloade
 config_and_lang_file_could_not_be_reloaded: '&fReload unsuccessful. Check console for more details.'
 attacking_player_message: '&eYou cannot attack an innocent person while he''s on cooldown!'
 victim_player_message: '&eYou cannot attack an enemy while on cooldown!'
+player_protection_ended: '&eYour protection has ended, be careful to surrounding enemies!'
