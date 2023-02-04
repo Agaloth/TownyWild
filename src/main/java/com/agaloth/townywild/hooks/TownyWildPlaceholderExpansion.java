@@ -9,7 +9,6 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
-import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.agaloth.townywild.TownyWild.plugin;
@@ -22,8 +21,13 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     }
 
     public long getRemainingProtectionTime(Player player) {
+        // Takes the current time in milliseconds
         long now = System.currentTimeMillis();
-        long expireTime = protectionExpirationTime.getOrDefault(player, now);
+
+        // Gets the expiration time from the protectionExpirationTime hashmap
+        long expireTime = protectionExpirationTime.get(player);
+
+        // Then the placeholder returns a countdown with the following formula:
         return (expireTime - now) / 1000;
     }
 
