@@ -15,13 +15,7 @@ import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
 import com.palmergames.bukkit.towny.object.Translatable;
 
-import me.clip.placeholderapi.PlaceholderAPI;
-
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -64,7 +58,6 @@ public class TownyWildTownEventListener implements Listener {
         // Gets the remaining time from the config file
         int remainingTime = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border"))));
 
-
         // Add player to the hashmap storing expiration times.
         protectionExpirationTime.put(event.getPlayer(), (long) remainingTime*1000L + System.currentTimeMillis());
 
@@ -73,7 +66,7 @@ public class TownyWildTownEventListener implements Listener {
         cancelProtectionTask.put(event.getPlayer(), task);
 
         // Runs a Bukkit scheduler to update the bossbar progress and adds the player to the runningBossBars hashmap to remove it when entering a town.
-        BukkitTask updateProgress = new UpdateBossBarProgress(event.getPlayer()).runTaskTimer(plugin, 20, 20);
+        BukkitTask updateProgress = new UpdateBossBarProgress(event.getPlayer(), remainingTime).runTaskTimer(plugin, 0, 20);
         runningBossBars.put(event.getPlayer(), updateProgress);
 
 
