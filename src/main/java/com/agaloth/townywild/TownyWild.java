@@ -32,9 +32,9 @@ public class TownyWild extends JavaPlugin {
             try{
                 getLogger().info("Trying to load PAPI expansion...");
                 new TownyWildPlaceholderExpansion().register();
-                getLogger().info("Success!");
+                getLogger().info("Successfully registered the PAPI Expansion!");
             } catch (Exception e){
-                getLogger().severe("Failed!");
+                getLogger().severe("Failed to register the PAPI Expansion!");
                 e.printStackTrace();
             }
         }
