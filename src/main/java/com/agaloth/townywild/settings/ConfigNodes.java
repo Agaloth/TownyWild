@@ -8,7 +8,7 @@ public enum ConfigNodes {
             "",
             "# This is the current version of TownyWild. DO NOT EDIT THIS."),
     LANGUAGE("language",
-            "english.yml",
+            "en-US.yml",
             "# The language file you wish to use"),
     TOWNY_WILD_ENABLED(
             "towny_wild_enabled",
@@ -49,7 +49,7 @@ public enum ConfigNodes {
             "# This is the style for the bossbar, you can use SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12 and SEGMENTED_20"),
     BOSS_BAR_MESSAGE(
             "bossbar_message",
-            "You are protected for %townywild_countdown%!",
+            "&e&lYou are protected for %townywild_countdown%!",
             "# This is the message that will be displayed on the boss bar. (Use the %townywild_countdown% placeholder if you want to include the amount of time left before their protection ends)");
 
     private final String Root;
