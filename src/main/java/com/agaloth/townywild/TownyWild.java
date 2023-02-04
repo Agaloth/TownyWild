@@ -69,7 +69,6 @@ public class TownyWild extends JavaPlugin {
     // Registers the TownyWildAdmin command (used for reloading)
     private void registerCommands() {
         getCommand("townywildadmin").setExecutor(new TownyWildAdminCommand());
-        getCommand("townywildtest").setExecutor(new TownyWildTestCommand());
     }
 
     // Gets Towny's version
