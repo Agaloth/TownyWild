@@ -46,7 +46,7 @@ public enum ConfigNodes {
     BOSSBAR_STYLE(
             "bossbar_style",
             "STATIC",
-            "# This is the style for the bossbar, you can use STATIC, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12 and SEGMENTED_20"),
+            "# This is the style for the bossbar, you can use SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12 and SEGMENTED_20"),
     BOSS_BAR_MESSAGE(
             "bossbar_message",
             "You are protected for %townywild_countdown%!",
