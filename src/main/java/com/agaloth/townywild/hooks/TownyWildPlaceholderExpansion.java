@@ -8,10 +8,12 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.agaloth.townywild.TownyWild.plugin;
+import static com.agaloth.townywild.settings.Settings.getConfig;
 
 public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     public static Map<Player, Long> protectionExpirationTime = new HashMap<>();
@@ -22,24 +24,28 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     public long getRemainingProtectionTime(Player player) {
         long now = System.currentTimeMillis();
         long expireTime = protectionExpirationTime.getOrDefault(player, now);
-        long secondsRemaining = (expireTime - now) / 1000;
-        return secondsRemaining;
+        return (expireTime - now) / 1000;
     }
 
     public long setRemainingProtectionTime(Player player) {
-        long expireTime = System.currentTimeMillis() + (5 * 1000);
+        // Takes the protection time from the config file.
+        long configTime = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border"))));
+
+        // Uses a formula which takes the currentTimeMillis and adds the protection time from the config file multiplied by 1000.
+        long expireTime = System.currentTimeMillis() + (configTime * 1000);
 
             // Creates a new Bukkit runTaskTimer runnable
             new BukkitRunnable() {
 
                 @Override
                 public void run() {
+                    // If currentTimeMillis is higher or equal to the expireTime it will remove the player's protection.
                     if (System.currentTimeMillis() >= expireTime) {
                         protectionExpirationTime.remove(player, expireTime);
                     }
 
                 }
-            }.runTaskLater(plugin, 5*20);
+            }.runTaskLater(plugin, configTime*20);
         return expireTime;
     }
 
