@@ -1,12 +1,12 @@
 package com.agaloth.townywild.commands;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
 
 import com.agaloth.townywild.enums.TownyWildPermissionNodes;
 import com.agaloth.townywild.settings.Settings;
-import com.agaloth.townywild.utils.Messaging;
 
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
@@ -39,7 +39,7 @@ public class TownyWildAdminCommand implements TabExecutor {
     private void parseAdminCommand(CommandSender sender, String[] args) {
         if (args.length > 0) {
             if (sender instanceof Player && !sender.hasPermission(TownyWildPermissionNodes.TOWNYWILD_ADMIN_COMMAND.getNode(args[0]))) {
-                Messaging.sendErrorMsg(sender, Translatable.of("msg_err_command_disable"));
+                TownyMessaging.sendErrorMsg(sender, Translatable.of("plugin_prefix").append(Translatable.of("msg_err_command_disable")));
             return;
         }
         switch(args[0]) {
@@ -52,7 +52,7 @@ public class TownyWildAdminCommand implements TabExecutor {
 } else {
     if (sender instanceof Player
             && !((Player)sender).hasPermission(TownyWildPermissionNodes.TOWNYWILD_ADMIN_COMMAND.getNode())) {
-    Messaging.sendErrorMsg(sender, Translatable.of("msg_err_command_disable"));
+    TownyMessaging.sendErrorMsg(sender, Translatable.of("plugin_prefix").append(Translatable.of("msg_err_command_disable")));
     return;
         }
         showHelp(sender);
@@ -68,9 +68,9 @@ private void parseReloadCommand(CommandSender sender) {
         try {
         Settings.loadConfig();
         Settings.loadLanguages();
-        Messaging.sendMsg(sender, Translatable.of("config_and_lang_file_reloaded_successfully"));
+        TownyMessaging.sendMessage(sender, Translatable.of("plugin_prefix").append(Translatable.of("config_and_lang_file_reloaded_successfully")));
         } catch(Exception e) {
-        Messaging.sendErrorMsg(sender, Translatable.of("config_and_lang_file_could_not_be_reloaded"));
+        TownyMessaging.sendErrorMsg(sender, Translatable.of("plugin_prefix").append(Translatable.of("config_and_lang_file_could_not_be_reloaded")));
         e.printStackTrace();
         }
     }
