@@ -1,7 +1,6 @@
 package com.agaloth.townywild;
 
 import com.agaloth.townywild.commands.TownyWildAdminCommand;
-import com.agaloth.townywild.commands.TownyWildTestCommand;
 import com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion;
 import com.agaloth.townywild.listeners.TownyWildTownEventListener;
 import com.agaloth.townywild.settings.Settings;
