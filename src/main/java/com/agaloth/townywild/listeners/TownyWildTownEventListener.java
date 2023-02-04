@@ -4,12 +4,12 @@ import com.agaloth.townywild.TownyWild;
 import static com.agaloth.townywild.TownyWild.plugin;
 
 import com.agaloth.townywild.tasks.UpdateBossBarProgress;
-import com.agaloth.townywild.utils.Messaging;
 
 import static com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion.protectionExpirationTime;
 import static com.agaloth.townywild.settings.Settings.getConfig;
 import static com.agaloth.townywild.tasks.UpdateBossBarProgress.timeLeftBar;
 
+import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
@@ -43,13 +43,13 @@ public class TownyWildTownEventListener implements Listener {
         // If the protectionExpirationTime list contains the victim's UUID, it will cancel damages and send a message to the attacker.
         if (protectionExpirationTime.containsKey(victim)) {
             event.setCancelled(true);
-            Messaging.sendMsg(attacker, Translatable.of("attacking_player_message"));
+            TownyMessaging.sendMessage(attacker, Translatable.of("plugin_prefix").append(Translatable.of("victim_player_message")));
             return;
         }
         // If the protectionExpirationTime list contains the attacker's UUID, it will cancel damages and send a message to the player being attacked.
         if (protectionExpirationTime.containsKey(attacker)) {
             event.setCancelled(true);
-            Messaging.sendMsg(attacker, Translatable.of("victim_player_message"));
+            TownyMessaging.sendMessage(attacker, Translatable.of("plugin_prefix").append(Translatable.of("victim_player_message")));
         }
     }
 
@@ -106,6 +106,6 @@ public class TownyWildTownEventListener implements Listener {
         timeLeftBar.removePlayer(player);
 
         // Sends a message to the protected player telling them that their protection has ended.
-        Messaging.sendMsg(player, Translatable.of("player_protection_ended"));
+        TownyMessaging.sendMessage(player, Translatable.of("plugin_prefix").append(Translatable.of("player_protection_ended")));
     }
 }
