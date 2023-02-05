@@ -9,13 +9,15 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 import static com.agaloth.townywild.TownyWild.plugin;
 import static com.agaloth.townywild.settings.Settings.getConfig;
+import static com.agaloth.townywild.tasks.UpdateBossBarProgress.uuid;
 
 public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
-    public static Map<Player, Long> protectionExpirationTime = new HashMap<>();
+    public static Map<UUID, Long> protectionExpirationTime = new HashMap<>();
 
     public TownyWildPlaceholderExpansion() {
     }
@@ -25,7 +27,7 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
         long now = System.currentTimeMillis();
 
         // Gets the expiration time from the protectionExpirationTime hashmap
-        long expireTime = protectionExpirationTime.get(player);
+        long expireTime = protectionExpirationTime.get(uuid);
 
         // Then the placeholder returns a countdown with the following formula:
         return (expireTime - now) / 1000;
@@ -45,7 +47,7 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
                 public void run() {
                     // If currentTimeMillis is higher or equal to the expireTime it will remove the player's protection.
                     if (System.currentTimeMillis() >= expireTime) {
-                        protectionExpirationTime.remove(player, expireTime);
+                        protectionExpirationTime.remove(uuid, expireTime);
                     }
 
                 }
