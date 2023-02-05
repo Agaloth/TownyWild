@@ -48,7 +48,7 @@ public class UpdateBossBarProgress extends BukkitRunnable {
            timeLeftBar.setProgress((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease));
 
            // Adds the future time to the protectionExpirationTime hashmap which is the current time in milliseconds + the amount of protection time multiplied by 1000.
-           protectionExpirationTime.put(player, futureTime);
+           protectionExpirationTime.put(uuid, futureTime);
 
            // Translates the %townywild_countdown% placeholder and gets the text, color and style from config files
            String bossBarText = PlaceholderAPI.setPlaceholders(player, getConfig().getString("bossbar_message","You are protected for %townywild_countdown%!"));
@@ -69,6 +69,6 @@ public class UpdateBossBarProgress extends BukkitRunnable {
                 timeLeftBar.setProgress(0);
             }
             // Removes the future time from the protectionExpirationTime hashmap to run the task again until the bossbar ends.
-            protectionExpirationTime.remove(player);
+            protectionExpirationTime.remove(uuid);
         }
     }
