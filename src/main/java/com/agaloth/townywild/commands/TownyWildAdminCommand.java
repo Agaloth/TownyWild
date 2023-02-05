@@ -12,6 +12,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -19,19 +20,16 @@ import java.util.List;
 
 public class TownyWildAdminCommand implements TabExecutor {
 
-    private static final List<String> townyWildAdminTabCompletes = Arrays.asList("reload");
+    private static final List<String> townyWildAdminTabCompletes = Collections.singletonList("reload");
 
-    public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        switch (args[0].toLowerCase()) {
-            default:
-                if (args.length == 1)
-                    return NameUtil.filterByStart(townyWildAdminTabCompletes, args[0]);
-                else
-                    return Collections.emptyList();
-        }
+    public List<String> onTabComplete(@NotNull CommandSender sender, @NotNull Command command, @NotNull String alias, String[] args) {
+        if (args.length == 1)
+            return NameUtil.filterByStart(townyWildAdminTabCompletes, args[0]);
+        else
+            return Collections.emptyList();
     }
 
-    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command cmd, @NotNull String commandLabel, String[] args) {
         parseAdminCommand(sender, args);
         return true;
     }
@@ -42,16 +40,14 @@ public class TownyWildAdminCommand implements TabExecutor {
                 TownyMessaging.sendErrorMsg(sender, Translatable.of("plugin_prefix").append(Translatable.of("msg_err_command_disable")));
             return;
         }
-        switch(args[0]) {
-          case "reload":
-              parseReloadCommand(sender);
-          break;
-          default:
-              showHelp(sender);
+            if (args[0].equals("reload")) {
+                parseReloadCommand(sender);
+            } else {
+                showHelp(sender);
             }
 } else {
     if (sender instanceof Player
-            && !((Player)sender).hasPermission(TownyWildPermissionNodes.TOWNYWILD_ADMIN_COMMAND.getNode())) {
+            && !sender.hasPermission(TownyWildPermissionNodes.TOWNYWILD_ADMIN_COMMAND.getNode())) {
     TownyMessaging.sendErrorMsg(sender, Translatable.of("plugin_prefix").append(Translatable.of("msg_err_command_disable")));
     return;
         }
