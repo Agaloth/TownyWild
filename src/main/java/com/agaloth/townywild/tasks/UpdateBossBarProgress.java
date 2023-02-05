@@ -7,15 +7,19 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
+import org.bukkit.event.Listener;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.UUID;
 
 import static com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion.protectionExpirationTime;
 import static com.agaloth.townywild.settings.Settings.getConfig;
 
-public class UpdateBossBarProgress extends BukkitRunnable {
+public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
+    public static Map<UUID, BossBar> createBossBar = new HashMap<>();
     private final double totalSeconds;
     private final long futureTime;
     public static UUID uuid;
@@ -24,11 +28,9 @@ public class UpdateBossBarProgress extends BukkitRunnable {
     Player player = Bukkit.getPlayer(uuid);
 
     // Creates a bossbar called timeLeftBar and gets the messages, colors and style from the config file
-    public static BossBar timeLeftBar = Bukkit.createBossBar(
-            ChatColor.BLUE + "You are protected for %townywild_countdown%",
+    BossBar timeLeftBar = Bukkit.createBossBar(ChatColor.BLUE + "You are protected for %townywild_countdown%",
             BarColor.BLUE,
             BarStyle.SOLID);
-
 
     public UpdateBossBarProgress(Player player, long remainingTime) {
         // This is a formula used to create a cooldown by adding futureTime to the protectionExpirationTime hashmap on the run method, check TownyWildPlaceholderExpansion to see how it is used.
@@ -37,6 +39,8 @@ public class UpdateBossBarProgress extends BukkitRunnable {
         // Used in the formula on the run method, it gets the protection time from the config file and divides it by 10.
         this.totalSeconds = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border")))) / 10D;
 
+        // Adds the player's uuid and the timeLeftBar bossbar to the createBossBar hashmap
+        createBossBar.put(player.getUniqueId(), timeLeftBar);
     }
 
     @Override
@@ -55,7 +59,6 @@ public class UpdateBossBarProgress extends BukkitRunnable {
            String bossbarColor = getConfig().getString("bossbar_color");
            String bossbarStyle = getConfig().getString("bossbar_style");
 
-
            // Adds color support to the bossbar text
            bossBarText = ChatColor.translateAlternateColorCodes('&', bossBarText);
 
@@ -70,5 +73,8 @@ public class UpdateBossBarProgress extends BukkitRunnable {
             }
             // Removes the future time from the protectionExpirationTime hashmap to run the task again until the bossbar ends.
             protectionExpirationTime.remove(uuid);
+
+            // Adds the player's uuid and the timeLeftBar bossbar to the createBossBar hashmap
+            createBossBar.put(uuid, timeLeftBar);
         }
     }
