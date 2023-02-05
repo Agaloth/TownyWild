@@ -3,7 +3,7 @@ package com.agaloth.townywild.enums;
 public enum TownyWildPermissionNodes {
     TOWNYWILD_ADMIN_COMMAND("townywild.reload");
 
-    private String value;
+    private final String value;
 
     TownyWildPermissionNodes(String permission) {
         this.value = permission;
@@ -13,8 +13,5 @@ public enum TownyWildPermissionNodes {
     }
     public String getNode(String replace) {
         return value.replace("*", replace);
-    }
-    public String getNode(int replace) {
-        return value.replace("*", replace + "");
     }
 }
