@@ -45,7 +45,7 @@ public enum ConfigNodes {
             "# This is the color for the bossbar, you can use BLUE, GREEN, PINK, PURPLE, RED, WHITE and YELLOW"),
     BOSSBAR_STYLE(
             "bossbar_style",
-            "STATIC",
+            "SOLID",
             "# This is the style for the bossbar, you can use SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12 and SEGMENTED_20"),
     BOSS_BAR_MESSAGE(
             "bossbar_message",
@@ -54,7 +54,7 @@ public enum ConfigNodes {
 
     private final String Root;
     private final String Default;
-    private String[] comments;
+    private final String[] comments;
 
     ConfigNodes(String root, String def, String... comments) {
 
