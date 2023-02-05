@@ -17,5 +17,3 @@ permissions:
   townywild.reload:
     description: The user is able to reload the TownyWild plugin with this permission.
     default: op
-    children:
-      townywild.reload: true
