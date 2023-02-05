@@ -12,6 +12,8 @@ import com.palmergames.bukkit.util.Version;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.Objects;
+
 public class TownyWild extends JavaPlugin {
 
     public static TownyWild plugin;
@@ -67,7 +69,7 @@ public class TownyWild extends JavaPlugin {
 
     // Registers the TownyWildAdmin command (used for reloading)
     private void registerCommands() {
-        getCommand("townywildadmin").setExecutor(new TownyWildAdminCommand());
+        Objects.requireNonNull(getCommand("townywildadmin")).setExecutor(new TownyWildAdminCommand());
     }
 
     // Gets Towny's version
