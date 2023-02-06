@@ -6,7 +6,7 @@
 
     <groupId>com.agaloth</groupId>
     <artifactId>TownyWild</artifactId>
-    <version>1.00</version>
+    <version>1.02</version>
     <packaging>jar</packaging>
 
     <name>TownyWild</name>
@@ -57,10 +57,6 @@
 
     <repositories>
         <repository>
-            <id>spigotmc-repo</id>
-            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-        </repository>
-        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -69,12 +65,12 @@
             <url>https://repo.glaremasters.me/repository/towny/</url>
         </repository>
         <repository>
-            <id>bstats-bukkit</id>
-            <url>https://mvnrepository.com/artifact/org.bstats/bstats-bukkit</url>
-        </repository>
-        <repository>
             <id>placeholderapi</id>
             <url>https://repo.extendedclip.com/content/repositories/placeholderapi/</url>
+        </repository>
+        <repository>
+            <id>paper-repo</id>
+            <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
     </repositories>
 
