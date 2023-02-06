@@ -1,7 +1,6 @@
-  
 version:
   # This is the current version of TownyWild. DO NOT EDIT THIS.
-  version: '1.00'
+  version: '1.02'
 # The language file you wish to use
 language: en-US.yml
   
@@ -13,10 +12,18 @@ language: en-US.yml
   
 towny_wild_enabled: 'true'
   
+# This is used to blacklist worlds, players won't get protection in these worlds.
+# You can add worlds to the list by adding this:
+# blacklisted_worlds:
+#   - first_world_name
+#   - second_world_name
+blacklisted_worlds: []
+  
 # If this value is true, players will get protection near town blocks.
 protection_after_exiting_town_border: 'true'
+  
 # This is the amount of time in seconds, the player exiting the town border will have PvP protection for, during that time, the player cannot hit or get hit by other players.
-protection_time_after_exiting_town_border: '20'
+protection_time_after_exiting_town_border: '15'
 #
 ############################################################
 # +------------------------------------------------------+ #
@@ -25,9 +32,12 @@ protection_time_after_exiting_town_border: '20'
 ############################################################
   
 bossbar_enabled: 'true'
+
 # This is the color for the bossbar, you can use BLUE, GREEN, PINK, PURPLE, RED, WHITE and YELLOW
 bossbar_color: YELLOW
+
 # This is the style for the bossbar, you can use SOLID, SEGMENTED_6, SEGMENTED_10, SEGMENTED_12 and SEGMENTED_20
 bossbar_style: STATIC
+
 # This is the message that will be displayed on the boss bar. (Use the %townywild_countdown% placeholder if you want to include the amount of time left before their protection ends)
 bossbar_message: '&e&lYou are protected for %townywild_countdown%!'
