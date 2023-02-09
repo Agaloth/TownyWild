@@ -10,6 +10,7 @@ import static com.agaloth.townywild.settings.Settings.getConfig;
 import static com.agaloth.townywild.tasks.UpdateBossBarProgress.*;
 
 import com.palmergames.bukkit.towny.TownyMessaging;
+import com.palmergames.bukkit.towny.event.TownClaimEvent;
 import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
 import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
@@ -23,6 +24,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerChangedWorldEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitTask;
 
 import java.util.Collections;
@@ -112,6 +114,66 @@ public class TownyWildTownEventListener implements Listener {
                 // Add the player to the timeLeftBar bossbar.
                 timeLeftBar.addPlayer(player);
             }
+        }
+    }
+
+    @EventHandler
+    public void TownSpawn(PlayerTeleportEvent event) {
+        // Gets a player's UUID
+        UUID uuid = event.getPlayer().getUniqueId();
+
+        // Gets the Bukkit task and cancels the protection task.
+        if (cancelProtectionTask.containsKey(event.getPlayer().getUniqueId())) {
+            cancelProtectionTask.get(event.getPlayer().getUniqueId()).cancel();
+        }
+
+        // Gets the Bukkit task and cancels the bossbar progress task and sets the progress to 1 to prevent the progress bar from starting at random numbers.
+        if (runningBossBars.containsKey(event.getPlayer().getUniqueId())) {
+            runningBossBars.get(event.getPlayer().getUniqueId()).cancel();
+            runningBossBars.remove(event.getPlayer().getUniqueId());
+
+            // Removes the bossbar if a player enters a town.
+            BossBar timeLeftBar = createBossBar.remove(event.getPlayer().getUniqueId());
+
+            // If the timeLeftBar expired don't do anything but if it's still running then remove the timeLeftBar bossbar when entering a town.
+            if (timeLeftBar == null) {
+                return;
+            } else {
+                timeLeftBar.removePlayer(event.getPlayer());
+            }
+
+            // Removes a player's UUID from the protectionExpirationTime list when entering a town.
+            protectionExpirationTime.remove(event.getPlayer().getUniqueId());
+        }
+    }
+
+    @EventHandler
+    public void TownClaim(TownClaimEvent event) {
+        // Gets a player's UUID
+        UUID uuid = event.getResident().getUUID();
+
+        // Gets the Bukkit task and cancels the protection task.
+        if (cancelProtectionTask.containsKey(event.getResident().getUUID())) {
+            cancelProtectionTask.get(event.getResident().getUUID()).cancel();
+        }
+
+        // Gets the Bukkit task and cancels the bossbar progress task and sets the progress to 1 to prevent the progress bar from starting at random numbers.
+        if (runningBossBars.containsKey(event.getResident().getUUID())) {
+            runningBossBars.get(event.getResident().getUUID()).cancel();
+            runningBossBars.remove(event.getResident().getUUID());
+
+            // Removes the bossbar if a player enters a town.
+            BossBar timeLeftBar = createBossBar.remove(event.getResident().getUUID());
+
+            // If the timeLeftBar expired don't do anything but if it's still running then remove the timeLeftBar bossbar when entering a town.
+            if (timeLeftBar == null) {
+                return;
+            } else {
+                timeLeftBar.removePlayer(Objects.requireNonNull(event.getResident().getPlayer()));
+            }
+
+            // Removes a player's UUID from the protectionExpirationTime list when entering a town.
+            protectionExpirationTime.remove(event.getResident().getUUID());
         }
     }
 
