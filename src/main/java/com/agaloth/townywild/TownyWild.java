@@ -1,6 +1,7 @@
 package com.agaloth.townywild;
 
 import com.agaloth.townywild.commands.TownyWildAdminCommand;
+import com.agaloth.townywild.commands.TownyWildToggleCommand;
 import com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion;
 import com.agaloth.townywild.listeners.TownyWildTownEventListener;
 import com.agaloth.townywild.settings.Settings;
@@ -67,9 +68,10 @@ public class TownyWild extends JavaPlugin {
         return Version.fromString(version).compareTo(requiredTownyVersion) >= 0;
     }
 
-    // Registers the TownyWildAdmin command (used for reloading)
+    // Registers the TownyWildAdmin command (used for reloading) and the TownyWildProtection command (used to toggle the protection)
     private void registerCommands() {
         Objects.requireNonNull(getCommand("townywildadmin")).setExecutor(new TownyWildAdminCommand());
+        Objects.requireNonNull(getCommand("townywildprotection")).setExecutor(new TownyWildToggleCommand());
     }
 
     // Gets Towny's version
