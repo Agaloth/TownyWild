@@ -1,7 +1,7 @@
 package com.agaloth.townywild.enums;
 
 public enum TownyWildPermissionNodes {
-    TOWNYWILD_ADMIN_COMMAND("townywild.reload");
+    TOWNYWILD_ADMIN_COMMAND("townywild.reload"), TOWNYWILD_TOGGLE_COMMAND("townywild.toggle");
 
     private final String value;
 
