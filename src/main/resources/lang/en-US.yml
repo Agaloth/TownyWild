@@ -1,5 +1,5 @@
 name: TownyWild
-version: 1.04
+version: 1.05
 language: english
 author: Agaloth
 website: 'http://townyadvanced.github.io/'
@@ -27,8 +27,11 @@ description: >
 plugin_prefix: '&6&lTownyWild &8&l» &r'
 msg_err_command_disable: '&cYou don''t have enough permissions for that command.'
 admin_help_reload: 'Reload the config and language files.'
+toggle_help: 'Toggle the protection when exiting a town border.'
 config_and_lang_file_reloaded_successfully: '&fConfig and Language files reloaded successfully.'
 config_and_lang_file_could_not_be_reloaded: '&fReload unsuccessful. Check console for more details.'
 attacking_player_message: '&eYou cannot attack an innocent person while he''s on cooldown!'
 victim_player_message: '&eYou cannot attack an enemy while on cooldown!'
 player_protection_ended: '&eYour protection has ended, be careful to surrounding enemies!'
+player_toggled_protection_on: '&eYou have toggled on your protection when exiting a town!'
+player_toggled_protection_off: '&eYou have toggled off your protection when exiting a town!'
