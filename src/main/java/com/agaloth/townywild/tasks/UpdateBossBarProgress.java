@@ -33,6 +33,7 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
             BarStyle.SOLID);
 
     public UpdateBossBarProgress(Player player, long remainingTime) {
+
         // This is a formula used to create a cooldown by adding futureTime to the protectionExpirationTime hashmap on the run method, check TownyWildPlaceholderExpansion to see how it is used.
         this.futureTime = System.currentTimeMillis() + (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border")))) * 1000L;
 
@@ -45,6 +46,7 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
 
     @Override
     public void run() {
+
             // Uses a formula doing 0.1 divided by the total seconds left.
             double timeDecrease = (double) 0.1 / totalSeconds;
 
