@@ -58,7 +58,7 @@ public class TownyWildToggleCommand implements TabExecutor {
                 return;
             }
 
-            // If the first argument is "reload".
+            // If the first argument is "toggle".
             if (args[0].equals("toggle")) {
 
                 // Run the parseToggleCommand method.
