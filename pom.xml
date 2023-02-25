@@ -6,7 +6,7 @@
 
     <groupId>com.agaloth</groupId>
     <artifactId>TownyWild</artifactId>
-    <version>1.05</version>
+    <version>1.06</version>
     <packaging>jar</packaging>
 
     <name>TownyWild</name>
@@ -57,6 +57,10 @@
 
     <repositories>
         <repository>
+            <id>jitpack.io</id>
+            <url>https://jitpack.io</url>
+        </repository>
+        <repository>
             <id>sonatype</id>
             <url>https://oss.sonatype.org/content/groups/public/</url>
         </repository>
@@ -85,6 +89,12 @@
             <groupId>com.palmergames.bukkit.towny</groupId>
             <artifactId>towny</artifactId>
             <version>0.98.6.0</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.github.townyadvanced</groupId>
+            <artifactId>siegewar</artifactId>
+            <version>1.3.0</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
