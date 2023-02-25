@@ -10,12 +10,7 @@ public enum ConfigNodes {
 
     LANGUAGE("language",
             "en-US.yml",
-            "# The language file you wish to use"),
-
-    TOWNY_WILD_ENABLED(
-            "towny_wild_enabled",
-            "true",
-            "",
+            "# The language file you wish to use",
 
             "############################################################",
             "# +------------------------------------------------------+ #",
@@ -32,6 +27,12 @@ public enum ConfigNodes {
             "# blacklisted_worlds:",
             "#   - first_world_name",
             "#   - second_world_name"),
+
+    SIEGE_WAR_START_PROTECTION(
+            "siege_war_start_protection",
+            "true",
+            "",
+            "# If this value is true, all players of the defenders town will get protection for the amount of seconds set in protection_time_after_exiting_town_border."),
 
     PROTECTION_AFTER_EXITING_TOWN_BORDER(
             "protection_after_exiting_town_border",
