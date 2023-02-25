@@ -18,6 +18,7 @@ import java.util.Objects;
 public class TownyWild extends JavaPlugin {
 
     public static TownyWild plugin;
+    private static boolean siegeWar;
     private final TownyWildTownEventListener listener = new TownyWildTownEventListener(this);
     private static final Version requiredTownyVersion = Version.fromString("0.98.4.0");
 
@@ -31,12 +32,12 @@ public class TownyWild extends JavaPlugin {
         Bukkit.getServer().getPluginManager().registerEvents(new TownyWildTownEventListener(this), this);
 
         // PlaceholderAPI Check
-        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
-            try{
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+            try {
                 getLogger().info("Trying to load PAPI expansion...");
                 new TownyWildPlaceholderExpansion().register();
                 getLogger().info("Successfully registered the PAPI Expansion!");
-            } catch (Exception e){
+            } catch (Exception e) {
                 getLogger().severe("Failed to register the PAPI Expansion!");
                 e.printStackTrace();
             }
@@ -49,7 +50,7 @@ public class TownyWild extends JavaPlugin {
             } else {
                 throw new RuntimeException("Towny version does not meet required minimum version: " + requiredTownyVersion);
             }
-            if(Towny.getPlugin().isError()) {
+            if (Towny.getPlugin().isError()) {
                 throw new RuntimeException("Towny is in error. TownyWild startup halted.");
             }
             Settings.loadConfig();
@@ -61,7 +62,14 @@ public class TownyWild extends JavaPlugin {
             e.printStackTrace();
             info("TownyWild did not start correctly.");
         }
+
+        // Siege War Check
+        if (getServer().getPluginManager().getPlugin("SiegeWar") != null) {
+            getLogger().info("Successfully loaded the Siege War Expansion");
+            siegeWar = true;
+        }
     }
+
 
     // Towny Version Check
     private boolean townyVersionCheck(String version) {
@@ -78,6 +86,11 @@ public class TownyWild extends JavaPlugin {
     private String getTownyVersion() {
 
         return Towny.getPlugin().getDescription().getVersion();
+    }
+
+    // Checks if Siege War is enabled on the server
+    public static boolean siegeWarPresent() {
+        return siegeWar;
     }
 
     public static TownyWild getPlugin() {
