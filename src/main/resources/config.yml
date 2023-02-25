@@ -1,36 +1,37 @@
 version:
   # This is the current version of TownyWild. DO NOT EDIT THIS.
-  version: '1.02'
+  version: '1.06'
 # The language file you wish to use
 language: en-US.yml
-  
-############################################################
-# +------------------------------------------------------+ #
-# |                 PROTECTION NEAR TOWN                 | #
-# +------------------------------------------------------+ #
-############################################################
-  
-towny_wild_enabled: 'true'
-  
+
+  ############################################################
+  # +------------------------------------------------------+ #
+  # |                 PROTECTION NEAR TOWN                 | #
+  # +------------------------------------------------------+ #
+  ############################################################
+
 # This is used to blacklist worlds, players won't get protection in these worlds.
 # You can add worlds to the list by adding this:
 # blacklisted_worlds:
 #   - first_world_name
 #   - second_world_name
 blacklisted_worlds: []
-  
+
+# If this value is true, all players of the defenders town will get protection for the amount of seconds set in protection_time_after_exiting_town_border.
+siege_war_start_protection: 'true'
+
 # If this value is true, players will get protection near town blocks.
 protection_after_exiting_town_border: 'true'
-  
+
 # This is the amount of time in seconds, the player exiting the town border will have PvP protection for, during that time, the player cannot hit or get hit by other players.
 protection_time_after_exiting_town_border: '15'
-#
-############################################################
-# +------------------------------------------------------+ #
-# |                   BOSSBAR SETTINGS                   | #
-# +------------------------------------------------------+ #
-############################################################
-  
+  #
+  ############################################################
+  # +------------------------------------------------------+ #
+  # |                   BOSSBAR SETTINGS                   | #
+  # +------------------------------------------------------+ #
+  ############################################################
+
 bossbar_enabled: 'true'
 
 # This is the color for the bossbar, you can use BLUE, GREEN, PINK, PURPLE, RED, WHITE and YELLOW
