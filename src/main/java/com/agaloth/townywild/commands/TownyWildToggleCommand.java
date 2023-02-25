@@ -90,7 +90,7 @@ public class TownyWildToggleCommand implements TabExecutor {
         sender.sendMessage(ChatTools.formatTitle("/townywildprotection"));
 
         // Send a message to the player with more information about the command.
-        sender.sendMessage(ChatTools.formatCommand("Eg", "/twp", "toggle", Translatable.of("toggle_help_reload").forLocale(sender)));
+        sender.sendMessage(ChatTools.formatCommand("Eg", "/twp", "toggle", Translatable.of("toggle_help").forLocale(sender)));
     }
 
     private void parseToggleCommand(CommandSender sender) {
