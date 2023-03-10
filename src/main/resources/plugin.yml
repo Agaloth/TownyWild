@@ -5,15 +5,20 @@ api-version: 1.19
 authors: [ Agaloth ]
 website: 'http://townyadvanced.github.io'
 depend: [Towny]
-softdepend: [PlaceholderAPI]
+softdepend: [PlaceholderAPI, SiegeWar]
 
 description: A protection plugin for Towny that provides players with protection in the wilderness for a set amount of time.
 
 commands:
   townywildadmin:
     aliases: [twa]
+  townywildprotection:
+    aliases: [twp]
 
 permissions:
   townywild.reload:
     description: The user is able to reload the TownyWild plugin with this permission.
+    default: op
+  townywild.toggle:
+    description: The user is able to toggle his protection when exiting a town with this permission.
     default: op
