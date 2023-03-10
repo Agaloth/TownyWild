@@ -3,6 +3,7 @@ package com.agaloth.townywild;
 import com.agaloth.townywild.commands.TownyWildAdminCommand;
 import com.agaloth.townywild.commands.TownyWildToggleCommand;
 import com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion;
+import com.agaloth.townywild.listeners.TownyWildSiegeWarEventListener;
 import com.agaloth.townywild.listeners.TownyWildTownEventListener;
 import com.agaloth.townywild.settings.Settings;
 
@@ -65,6 +66,7 @@ public class TownyWild extends JavaPlugin {
 
         // Siege War Check
         if (getServer().getPluginManager().getPlugin("SiegeWar") != null) {
+            Bukkit.getServer().getPluginManager().registerEvents(new TownyWildSiegeWarEventListener(this), this);
             getLogger().info("Successfully loaded the Siege War Expansion");
             siegeWar = true;
         }
