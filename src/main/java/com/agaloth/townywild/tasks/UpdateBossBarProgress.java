@@ -24,29 +24,35 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
     private final long futureTime;
     public static UUID uuid;
 
-    // Gets the player's uuid
-    Player player = Bukkit.getPlayer(uuid);
-
     // Creates a bossbar called timeLeftBar and gets the messages, colors and style from the config file
     BossBar timeLeftBar = Bukkit.createBossBar(ChatColor.BLUE + "You are protected for %townywild_countdown%",
             BarColor.BLUE,
             BarStyle.SOLID);
 
-    public UpdateBossBarProgress(Player player, long remainingTime) {
+    public UpdateBossBarProgress(UUID uuid, long remainingTime) {
+        UpdateBossBarProgress.uuid = uuid;
 
-        // This is a formula used to create a cooldown by adding futureTime to the protectionExpirationTime hashmap on the run method, check TownyWildPlaceholderExpansion to see how it is used.
         this.futureTime = System.currentTimeMillis() + (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border")))) * 1000L;
 
-        // Used in the formula on the run method, it gets the protection time from the config file and divides it by 10.
         this.totalSeconds = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border")))) / 10D;
 
-        // Adds the player's uuid and the timeLeftBar bossbar to the createBossBar hashmap
+        Player player = Bukkit.getPlayer(uuid);
+        BossBar timeLeftBar = Bukkit.createBossBar(ChatColor.BLUE + "You are protected for %townywild_countdown%",
+                BarColor.BLUE,
+                BarStyle.SOLID);
+        assert player != null;
         createBossBar.put(player.getUniqueId(), timeLeftBar);
     }
 
     @Override
     public void run() {
+        Player player = Bukkit.getPlayer(uuid);
+        BossBar timeLeftBar = createBossBar.get(uuid);
 
+        if (player == null || timeLeftBar == null) {
+            cancel(); // Cancel the task if the player or boss bar is not available
+            return;
+        }
             // Uses a formula doing 0.1 divided by the total seconds left.
             double timeDecrease = (double) 0.1 / totalSeconds;
 
@@ -57,7 +63,7 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
             protectionExpirationTime.put(uuid, futureTime);
 
             // Translates the %townywild_countdown% placeholder and gets the text, color and style from config files
-            String bossBarText = PlaceholderAPI.setPlaceholders(player, getConfig().getString("bossbar_message", "You are protected for %townywild_countdown%!"));
+        String bossBarText = PlaceholderAPI.setPlaceholders(player, getConfig().getString("bossbar_message", "You are protected for %townywild_countdown%!"));
             String bossbarColor = getConfig().getString("bossbar_color");
             String bossbarStyle = getConfig().getString("bossbar_style");
 

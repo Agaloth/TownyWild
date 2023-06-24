@@ -106,7 +106,7 @@ public class TownyWildTownEventListener implements Listener {
                 }
 
                 // Runs a Bukkit scheduler to update the bossbar progress and adds the player to the runningBossBars hashmap to remove it when entering a town.
-                BukkitTask updateProgress = new UpdateBossBarProgress(event.getPlayer(), remainingTime).runTaskTimer(plugin, 0, 20);
+                BukkitTask updateProgress = new UpdateBossBarProgress(event.getPlayer().getUniqueId(), remainingTime).runTaskTimer(plugin, 0, 20);
                 runningBossBars.put(event.getPlayer().getUniqueId(), updateProgress);
 
                 // Shows the bossbar to the player.
@@ -153,7 +153,7 @@ public class TownyWildTownEventListener implements Listener {
                     }
 
                     // Run a Bukkit scheduler to update the bossbar progress and add the player to the runningBossBars hashmap.
-                    BukkitTask updateProgress = new UpdateBossBarProgress(player, remainingTime).runTaskTimer(plugin, 0, 20);
+                    BukkitTask updateProgress = new UpdateBossBarProgress(player.getUniqueId(), remainingTime).runTaskTimer(plugin, 0, 20);
                     runningBossBars.put(player.getUniqueId(), updateProgress);
 
                     // Show the bossbar to the player.
