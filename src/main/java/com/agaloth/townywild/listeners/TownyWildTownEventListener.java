@@ -46,6 +46,8 @@ public class TownyWildTownEventListener implements Listener {
         // Gets the attacking player.
         Player attacker = event.getAttackingPlayer();
 
+        System.out.println("Damage event triggered");
+        System.out.println(protectionExpirationTime.keySet());
         // If the protectionExpirationTime list contains the victim's UUID, it will cancel damages and send a message to the attacker.
         if (protectionExpirationTime.containsKey(victim.getUniqueId())) {
             event.setCancelled(true);
