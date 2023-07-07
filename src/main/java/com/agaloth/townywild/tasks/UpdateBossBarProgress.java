@@ -48,6 +48,7 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
         BossBar timeLeftBar = createBossBar.get(uuid);
         if (player == null || timeLeftBar == null) {
             cancel(); // Cancel the task if the player or boss bar is not available
+            updateBossBar.remove(uuid);
             return;
         }
         // Uses a formula doing 0.1 divided by the total seconds left.
@@ -56,6 +57,7 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
         // Sets the bossbar progress to decrement each second with the formula.
         timeLeftBar.setProgress((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease));
 
+        System.out.println("UUID: " + uuid);
         // Adds the future time to the protectionExpirationTime hashmap which is the current time in milliseconds + the amount of protection time multiplied by 1000.
         protectionExpirationTime.put(uuid, futureTime);
 
@@ -77,6 +79,7 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
             timeLeftBar.setProgress(0);
             cancel();
         }
+        System.out.println("Removing: " + uuid);
         // Removes the future time from the protectionExpirationTime hashmap to run the task again until the bossbar ends.
         protectionExpirationTime.remove(uuid);
 
