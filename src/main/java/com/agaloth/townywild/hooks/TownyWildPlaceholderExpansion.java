@@ -14,7 +14,6 @@ import java.util.concurrent.TimeUnit;
 
 import static com.agaloth.townywild.TownyWild.plugin;
 import static com.agaloth.townywild.settings.Settings.getConfig;
-import static com.agaloth.townywild.tasks.UpdateBossBarProgress.uuid;
 
 public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     public static Map<UUID, Long> protectionExpirationTime = new HashMap<>();
@@ -23,12 +22,13 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     }
 
     public long getRemainingProtectionTime(Player player) {
+        if (player == null) return 0L;
 
         // Takes the current time in milliseconds
         long now = System.currentTimeMillis();
 
         // Gets the expiration time from the protectionExpirationTime hashmap
-        long expireTime = protectionExpirationTime.get(uuid);
+        long expireTime = protectionExpirationTime.get(player.getUniqueId());
 
         // Then the placeholder returns a countdown with the following formula:
         return (expireTime - now) / 1000;
@@ -49,7 +49,7 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
                 public void run() {
                     // If currentTimeMillis is higher or equal to the expireTime it will remove the player's protection.
                     if (System.currentTimeMillis() >= expireTime) {
-                        protectionExpirationTime.remove(uuid, expireTime);
+                        protectionExpirationTime.remove(player.getUniqueId(), expireTime);
                     }
 
                 }
@@ -97,18 +97,6 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     }
 
     /**
-     * if an expansion requires another plugin as a dependency, the proper name of the dependency should
-     * go here. Set this to null if your placeholders do not require another plugin be installed on the server
-     * for them to work. This is extremely important to set if you do have a dependency because
-     * if your dependency is not loaded when this hook is registered, it will be added to a cache to be
-     * registered when plugin: "getPlugin()" is enabled on the server.
-     */
-    @Override
-    public @NotNull String getPlugin() {
-        return "TownyWild";
-    }
-
-    /**
      * This is the version of this expansion
      */
     @Override
@@ -126,7 +114,7 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
         // If the placeholder is %townywild_countdown%
         if (identifier.equals("countdown")) {
 
-            long remainingProtectionTimeInSeconds = getRemainingProtectionTime((Player) player);
+            long remainingProtectionTimeInSeconds = getRemainingProtectionTime(player.getPlayer());
 
             // If the remaining protection time is greater than 60 seconds.
             if (remainingProtectionTimeInSeconds > 60) {

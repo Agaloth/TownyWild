@@ -20,7 +20,6 @@ public class TownyWild extends JavaPlugin {
 
     public static TownyWild plugin;
     private static boolean siegeWar;
-    private final TownyWildTownEventListener listener = new TownyWildTownEventListener(this);
     private static final Version requiredTownyVersion = Version.fromString("0.98.4.0");
 
     @Override
@@ -30,7 +29,7 @@ public class TownyWild extends JavaPlugin {
         ASCIIArt();
 
         // Registers the events from the TownyWildTownEventListener class.
-        Bukkit.getServer().getPluginManager().registerEvents(new TownyWildTownEventListener(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new TownyWildTownEventListener(), this);
 
         // PlaceholderAPI Check
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
