@@ -66,6 +66,9 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
         timeLeftBar.setColor(BarColor.valueOf(bossbarColor));
         timeLeftBar.setStyle(BarStyle.valueOf(bossbarStyle));
 
+        // Adds the player's uuid and the timeLeftBar bossbar to the createBossBar hashmap
+        createBossBar.put(player.getUniqueId(), timeLeftBar);
+
         // If the progress hits 0, the task will be cancelled.
         if (((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease)) > 0) return;
 
@@ -73,8 +76,5 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
         cancel();
         // Removes the future time from the protectionExpirationTime hashmap to run the task again until the bossbar ends.
         protectionExpirationTime.remove(player.getUniqueId());
-
-        // Adds the player's uuid and the timeLeftBar bossbar to the createBossBar hashmap
-        createBossBar.put(player.getUniqueId(), timeLeftBar);
     }
 }
