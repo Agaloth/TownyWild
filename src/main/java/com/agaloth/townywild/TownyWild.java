@@ -21,6 +21,7 @@ public class TownyWild extends JavaPlugin {
     public static TownyWild plugin;
     private static boolean siegeWar;
     private static final Version requiredTownyVersion = Version.fromString("0.98.4.0");
+    private TownyWildPlaceholderExpansion expansion;
 
     @Override
     public void onEnable() {
@@ -35,7 +36,8 @@ public class TownyWild extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             try {
                 getLogger().info("Trying to load PAPI expansion...");
-                new TownyWildPlaceholderExpansion().register();
+                this.expansion = new TownyWildPlaceholderExpansion();
+                this.expansion.register();
                 getLogger().info("Successfully registered the PAPI Expansion!");
             } catch (Exception e) {
                 getLogger().severe("Failed to register the PAPI Expansion!");
@@ -128,8 +130,9 @@ public class TownyWild extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
-        plugin = this;
         info("TownyWild has been Disabled.");
+        if (expansion != null) {
+            expansion.unregister();
+        }
     }
 }

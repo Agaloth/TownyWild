@@ -32,9 +32,9 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
         Player player = Bukkit.getPlayer(uuid);
         if (player == null) return;
 
-        BossBar timeLeftBar = Bukkit.createBossBar(ChatColor.BLUE + "You are protected for %townywild_countdown%",
-                BarColor.BLUE,
-                BarStyle.SOLID);
+        String bossbarColor = getConfig().getString("bossbar_color");
+        String bossbarStyle = getConfig().getString("bossbar_style");
+        BossBar timeLeftBar = Bukkit.createBossBar("You are protected for %townywild_countdown%", BarColor.valueOf(bossbarColor), BarStyle.valueOf(bossbarStyle));
         if (updateBossBar.containsKey(player.getUniqueId())) {
             updateBossBar.remove(player.getUniqueId()).cancel();
         }
@@ -63,17 +63,10 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
 
         // Translates the %townywild_countdown% placeholder and gets the text, color and style from config files
         String bossBarText = PlaceholderAPI.setPlaceholders(player, getConfig().getString("bossbar_message", "You are protected for %townywild_countdown%!"));
-        String bossbarColor = getConfig().getString("bossbar_color");
-        String bossbarStyle = getConfig().getString("bossbar_style");
-
         // Adds color support to the bossbar text
         bossBarText = ChatColor.translateAlternateColorCodes('&', bossBarText);
-
         // Sets the title to bossBarText with the translated %townywild_countdown% placeholder
         timeLeftBar.setTitle(bossBarText);
-        timeLeftBar.setColor(BarColor.valueOf(bossbarColor));
-        timeLeftBar.setStyle(BarStyle.valueOf(bossbarStyle));
-
         // If the progress hits 0, the task will be cancelled.
         if (((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease)) == 0) {
             timeLeftBar.setProgress(0);
