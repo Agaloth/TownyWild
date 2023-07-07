@@ -20,27 +20,25 @@ import static com.agaloth.townywild.settings.Settings.getConfig;
 
 public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
     public static Map<UUID, BossBar> createBossBar = new HashMap<>();
+    public static Map<UUID, UpdateBossBarProgress> updateBossBar = new HashMap<>();
     private final double totalSeconds;
     private final long futureTime;
-    public static UUID uuid;
-
-    // Creates a bossbar called timeLeftBar and gets the messages, colors and style from the config file
-    BossBar timeLeftBar = Bukkit.createBossBar(ChatColor.BLUE + "You are protected for %townywild_countdown%",
-            BarColor.BLUE,
-            BarStyle.SOLID);
+    private final UUID uuid;
 
     public UpdateBossBarProgress(UUID uuid, long remainingTime) {
-        UpdateBossBarProgress.uuid = uuid;
-
+        this.uuid = uuid;
         this.futureTime = System.currentTimeMillis() + (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border")))) * 1000L;
-
         this.totalSeconds = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border")))) / 10D;
-
         Player player = Bukkit.getPlayer(uuid);
+        if (player == null) return;
+
         BossBar timeLeftBar = Bukkit.createBossBar(ChatColor.BLUE + "You are protected for %townywild_countdown%",
                 BarColor.BLUE,
                 BarStyle.SOLID);
-        assert player != null;
+        if (updateBossBar.containsKey(player.getUniqueId())) {
+            updateBossBar.remove(player.getUniqueId()).cancel();
+        }
+        updateBossBar.put(player.getUniqueId(), this);
         createBossBar.put(player.getUniqueId(), timeLeftBar);
     }
 
@@ -48,42 +46,41 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
     public void run() {
         Player player = Bukkit.getPlayer(uuid);
         BossBar timeLeftBar = createBossBar.get(uuid);
-
         if (player == null || timeLeftBar == null) {
             cancel(); // Cancel the task if the player or boss bar is not available
             return;
         }
-            // Uses a formula doing 0.1 divided by the total seconds left.
-            double timeDecrease = (double) 0.1 / totalSeconds;
+        // Uses a formula doing 0.1 divided by the total seconds left.
+        double timeDecrease = 0.1 / totalSeconds;
 
-            // Sets the bossbar progress to decrement each second with the formula.
-            timeLeftBar.setProgress((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease));
+        // Sets the bossbar progress to decrement each second with the formula.
+        timeLeftBar.setProgress((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease));
 
-            // Adds the future time to the protectionExpirationTime hashmap which is the current time in milliseconds + the amount of protection time multiplied by 1000.
-            protectionExpirationTime.put(uuid, futureTime);
+        // Adds the future time to the protectionExpirationTime hashmap which is the current time in milliseconds + the amount of protection time multiplied by 1000.
+        protectionExpirationTime.put(uuid, futureTime);
 
-            // Translates the %townywild_countdown% placeholder and gets the text, color and style from config files
+        // Translates the %townywild_countdown% placeholder and gets the text, color and style from config files
         String bossBarText = PlaceholderAPI.setPlaceholders(player, getConfig().getString("bossbar_message", "You are protected for %townywild_countdown%!"));
-            String bossbarColor = getConfig().getString("bossbar_color");
-            String bossbarStyle = getConfig().getString("bossbar_style");
+        String bossbarColor = getConfig().getString("bossbar_color");
+        String bossbarStyle = getConfig().getString("bossbar_style");
 
-            // Adds color support to the bossbar text
-            bossBarText = ChatColor.translateAlternateColorCodes('&', bossBarText);
+        // Adds color support to the bossbar text
+        bossBarText = ChatColor.translateAlternateColorCodes('&', bossBarText);
 
-            // Sets the title to bossBarText with the translated %townywild_countdown% placeholder
-            timeLeftBar.setTitle(bossBarText);
-            timeLeftBar.setColor(BarColor.valueOf(bossbarColor));
-            timeLeftBar.setStyle(BarStyle.valueOf(bossbarStyle));
+        // Sets the title to bossBarText with the translated %townywild_countdown% placeholder
+        timeLeftBar.setTitle(bossBarText);
+        timeLeftBar.setColor(BarColor.valueOf(bossbarColor));
+        timeLeftBar.setStyle(BarStyle.valueOf(bossbarStyle));
 
-            // If the progress hits 0, the task will be cancelled.
-            if (((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease)) == 0) {
-                timeLeftBar.setProgress(0);
-                cancel();
-            }
-            // Removes the future time from the protectionExpirationTime hashmap to run the task again until the bossbar ends.
-            protectionExpirationTime.remove(uuid);
-
-            // Adds the player's uuid and the timeLeftBar bossbar to the createBossBar hashmap
-            createBossBar.put(uuid, timeLeftBar);
+        // If the progress hits 0, the task will be cancelled.
+        if (((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease)) == 0) {
+            timeLeftBar.setProgress(0);
+            cancel();
         }
+        // Removes the future time from the protectionExpirationTime hashmap to run the task again until the bossbar ends.
+        protectionExpirationTime.remove(uuid);
+
+        // Adds the player's uuid and the timeLeftBar bossbar to the createBossBar hashmap
+        createBossBar.put(uuid, timeLeftBar);
     }
+}

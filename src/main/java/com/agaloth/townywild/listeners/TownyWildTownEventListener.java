@@ -1,29 +1,17 @@
 package com.agaloth.townywild.listeners;
 
-import com.agaloth.townywild.TownyWild;
-import static com.agaloth.townywild.TownyWild.plugin;
-
 import com.agaloth.townywild.tasks.UpdateBossBarProgress;
-
-import static com.agaloth.townywild.TownyWild.siegeWarPresent;
-import static com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion.protectionExpirationTime;
-import static com.agaloth.townywild.settings.ConfigNodes.*;
-import static com.agaloth.townywild.settings.Settings.getBoolean;
-import static com.agaloth.townywild.settings.Settings.getConfig;
-import static com.agaloth.townywild.tasks.UpdateBossBarProgress.*;
-
 import com.gmail.goosius.siegewar.SiegeController;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
-import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
-import com.palmergames.bukkit.towny.object.Resident;
-import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
+import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
+import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
-
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
@@ -33,21 +21,21 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.UUID;
-import java.util.Objects;
+import java.util.*;
+
+import static com.agaloth.townywild.TownyWild.plugin;
+import static com.agaloth.townywild.TownyWild.siegeWarPresent;
+import static com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion.protectionExpirationTime;
+import static com.agaloth.townywild.settings.ConfigNodes.BOSSBAR_ENABLED;
+import static com.agaloth.townywild.settings.ConfigNodes.PROTECTION_AFTER_EXITING_TOWN_BORDER;
+import static com.agaloth.townywild.settings.Settings.getBoolean;
+import static com.agaloth.townywild.settings.Settings.getConfig;
+import static com.agaloth.townywild.tasks.UpdateBossBarProgress.createBossBar;
 
 public class TownyWildTownEventListener implements Listener {
     public static Map<UUID, BukkitTask> cancelProtectionTask = new HashMap<>();
     public static Map<UUID, BukkitTask> runningBossBars = new HashMap<>();
     public static HashSet<UUID> toggledProtection = new HashSet<>();
-
-    public TownyWildTownEventListener(TownyWild instance) {
-    }
 
     @EventHandler
     public void playerDamagePlayer(TownyPlayerDamagePlayerEvent event) {
