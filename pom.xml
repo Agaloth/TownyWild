@@ -6,7 +6,7 @@
 
     <groupId>com.agaloth</groupId>
     <artifactId>TownyWild</artifactId>
-    <version>1.08</version>
+    <version>1.09</version>
     <packaging>jar</packaging>
 
     <name>TownyWild</name>
