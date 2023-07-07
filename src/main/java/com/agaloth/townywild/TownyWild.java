@@ -21,7 +21,7 @@ public class TownyWild extends JavaPlugin {
     public static TownyWild plugin;
     private static boolean siegeWar;
     private TownyWildPlaceholderExpansion placeholderExpansion;
-    private static final Version requiredTownyVersion = Version.fromString("0.98.4.0");
+    private static final Version requiredTownyVersion = Version.fromString("0.98.1.5");
 
     @Override
     public void onEnable() {
@@ -30,7 +30,7 @@ public class TownyWild extends JavaPlugin {
         ASCIIArt();
 
         // Registers the events from the TownyWildTownEventListener class.
-        Bukkit.getServer().getPluginManager().registerEvents(new TownyWildTownEventListener(this), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new TownyWildTownEventListener(), this);
 
         // PlaceholderAPI Check
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {

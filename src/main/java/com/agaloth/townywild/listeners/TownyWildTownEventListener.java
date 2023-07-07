@@ -46,9 +46,6 @@ public class TownyWildTownEventListener implements Listener {
     public static Map<UUID, BukkitTask> runningBossBars = new HashMap<>();
     public static HashSet<UUID> toggledProtection = new HashSet<>();
 
-    public TownyWildTownEventListener(TownyWild instance) {
-    }
-
     @EventHandler
     public void playerDamagePlayer(TownyPlayerDamagePlayerEvent event) {
 
@@ -58,6 +55,7 @@ public class TownyWildTownEventListener implements Listener {
         // Gets the attacking player.
         Player attacker = event.getAttackingPlayer();
 
+        System.out.println(protectionExpirationTime.values() + "values");
         // If the protectionExpirationTime list contains the victim's UUID, it will cancel damages and send a message to the attacker.
         if (protectionExpirationTime.containsKey(victim.getUniqueId())) {
             event.setCancelled(true);
