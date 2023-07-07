@@ -56,7 +56,7 @@ public class TownyWildTownEventListener implements Listener {
         // If the protectionExpirationTime list contains the attacker's UUID, it will cancel damages and send a message to the player being attacked.
         if (protectionExpirationTime.containsKey(attacker.getUniqueId())) {
             event.setCancelled(true);
-            TownyMessaging.sendMessage(attacker, Translatable.of("plugin_prefix").append(Translatable.of("attacker_player_message")));
+            TownyMessaging.sendMessage(attacker, Translatable.of("plugin_prefix").append(Translatable.of("attacking_player_message")));
         }
     }
 
