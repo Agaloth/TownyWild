@@ -3,17 +3,12 @@ package com.agaloth.townywild.hooks;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Objects;
 import java.util.UUID;
 import java.util.concurrent.TimeUnit;
-
-import static com.agaloth.townywild.TownyWild.plugin;
-import static com.agaloth.townywild.settings.Settings.getConfig;
 
 public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
     public static Map<UUID, Long> protectionExpirationTime = new HashMap<>();
@@ -32,36 +27,6 @@ public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
         // Then the placeholder returns a countdown with the following formula:
         return (expireTime - now) / 1000;
     }
-
-    public long setRemainingProtectionTime(Player player) {
-
-        // Takes the protection time from the config file.
-        long configTime = (Integer.parseInt(Objects.requireNonNull(getConfig().getString("protection_time_after_exiting_town_border"))));
-
-        // Uses a formula which takes the currentTimeMillis and adds the protection time from the config file multiplied by 1000.
-        long expireTime = System.currentTimeMillis() + (configTime * 1000);
-
-            // Creates a new Bukkit runTaskTimer runnable
-            new BukkitRunnable() {
-
-                @Override
-                public void run() {
-                    // If currentTimeMillis is higher or equal to the expireTime it will remove the player's protection.
-                    if (System.currentTimeMillis() >= expireTime) {
-                        protectionExpirationTime.remove(player.getUniqueId(), expireTime);
-                    }
-
-                }
-            }.runTaskLater(plugin, configTime*20);
-        return expireTime;
-    }
-
-
-    /**
-     * This class will automatically register as a placeholder expansion
-     * when a jar including this class is added to the directory
-     * {@code /plugins/PlaceholderAPI/expansions} on your server.
-     */
 
 
     /**
