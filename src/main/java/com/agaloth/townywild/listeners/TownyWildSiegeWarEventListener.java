@@ -68,7 +68,7 @@ public class TownyWildSiegeWarEventListener implements Listener {
                     }
 
                     // Runs a Bukkit scheduler to update the bossbar progress and adds the residents of the defenders town to the runningBossBars hashmap to remove it when entering a town.
-                    BukkitTask updateProgress = new UpdateBossBarProgress(Objects.requireNonNull(Objects.requireNonNull(resident.getPlayer()).getUniqueId()), remainingTime).runTaskTimer(plugin, 0, 20);
+                    BukkitTask updateProgress = new UpdateBossBarProgress(Objects.requireNonNull(resident.getPlayer()), remainingTime).runTaskTimer(plugin, 0, 20);
                     runningBossBars.put(resident.getUUID(), updateProgress);
 
                     // Shows the bossbar to the residents of the defenders town.
@@ -128,7 +128,7 @@ public class TownyWildSiegeWarEventListener implements Listener {
                     if (timeLeftBar == null) {
                         return;
                     } else {
-                        timeLeftBar.removePlayer(Objects.requireNonNull(attacker.getPlayer()));
+                        timeLeftBar.removePlayer(attacker.getPlayer());
                     }
                 }
             }

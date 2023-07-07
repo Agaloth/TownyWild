@@ -20,8 +20,8 @@ public class TownyWild extends JavaPlugin {
 
     public static TownyWild plugin;
     private static boolean siegeWar;
+    private TownyWildPlaceholderExpansion placeholderExpansion;
     private static final Version requiredTownyVersion = Version.fromString("0.98.4.0");
-    private TownyWildPlaceholderExpansion expansion;
 
     @Override
     public void onEnable() {
@@ -30,14 +30,14 @@ public class TownyWild extends JavaPlugin {
         ASCIIArt();
 
         // Registers the events from the TownyWildTownEventListener class.
-        Bukkit.getServer().getPluginManager().registerEvents(new TownyWildTownEventListener(), this);
+        Bukkit.getServer().getPluginManager().registerEvents(new TownyWildTownEventListener(this), this);
 
         // PlaceholderAPI Check
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
             try {
                 getLogger().info("Trying to load PAPI expansion...");
-                this.expansion = new TownyWildPlaceholderExpansion();
-                this.expansion.register();
+                this.placeholderExpansion = new TownyWildPlaceholderExpansion();
+                this.placeholderExpansion.register();
                 getLogger().info("Successfully registered the PAPI Expansion!");
             } catch (Exception e) {
                 getLogger().severe("Failed to register the PAPI Expansion!");
@@ -130,9 +130,11 @@ public class TownyWild extends JavaPlugin {
 
     @Override
     public void onDisable() {
+        // Plugin shutdown logic
+        plugin = this;
         info("TownyWild has been Disabled.");
-        if (expansion != null) {
-            expansion.unregister();
+        if (this.placeholderExpansion != null) {
+            this.placeholderExpansion.unregister();
         }
     }
 }

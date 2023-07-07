@@ -1,17 +1,29 @@
 package com.agaloth.townywild.listeners;
 
+import com.agaloth.townywild.TownyWild;
+import static com.agaloth.townywild.TownyWild.plugin;
+
 import com.agaloth.townywild.tasks.UpdateBossBarProgress;
+
+import static com.agaloth.townywild.TownyWild.siegeWarPresent;
+import static com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion.protectionExpirationTime;
+import static com.agaloth.townywild.settings.ConfigNodes.*;
+import static com.agaloth.townywild.settings.Settings.getBoolean;
+import static com.agaloth.townywild.settings.Settings.getConfig;
+import static com.agaloth.townywild.tasks.UpdateBossBarProgress.*;
+
 import com.gmail.goosius.siegewar.SiegeController;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.event.NewTownEvent;
 import com.palmergames.bukkit.towny.event.TownClaimEvent;
+import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
+import com.palmergames.bukkit.towny.object.Resident;
+import com.palmergames.bukkit.towny.object.WorldCoord;
 import com.palmergames.bukkit.towny.event.damage.TownyPlayerDamagePlayerEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerEntersIntoTownBorderEvent;
 import com.palmergames.bukkit.towny.event.player.PlayerExitsFromTownBorderEvent;
-import com.palmergames.bukkit.towny.event.town.TownUnclaimEvent;
-import com.palmergames.bukkit.towny.object.Resident;
 import com.palmergames.bukkit.towny.object.Translatable;
-import com.palmergames.bukkit.towny.object.WorldCoord;
+
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
@@ -21,21 +33,21 @@ import org.bukkit.event.player.PlayerChangedWorldEvent;
 import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.scheduler.BukkitTask;
 
-import java.util.*;
-
-import static com.agaloth.townywild.TownyWild.plugin;
-import static com.agaloth.townywild.TownyWild.siegeWarPresent;
-import static com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion.protectionExpirationTime;
-import static com.agaloth.townywild.settings.ConfigNodes.BOSSBAR_ENABLED;
-import static com.agaloth.townywild.settings.ConfigNodes.PROTECTION_AFTER_EXITING_TOWN_BORDER;
-import static com.agaloth.townywild.settings.Settings.getBoolean;
-import static com.agaloth.townywild.settings.Settings.getConfig;
-import static com.agaloth.townywild.tasks.UpdateBossBarProgress.createBossBar;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.UUID;
+import java.util.Objects;
 
 public class TownyWildTownEventListener implements Listener {
     public static Map<UUID, BukkitTask> cancelProtectionTask = new HashMap<>();
     public static Map<UUID, BukkitTask> runningBossBars = new HashMap<>();
     public static HashSet<UUID> toggledProtection = new HashSet<>();
+
+    public TownyWildTownEventListener(TownyWild instance) {
+    }
 
     @EventHandler
     public void playerDamagePlayer(TownyPlayerDamagePlayerEvent event) {
@@ -46,8 +58,6 @@ public class TownyWildTownEventListener implements Listener {
         // Gets the attacking player.
         Player attacker = event.getAttackingPlayer();
 
-        System.out.println("Damage event triggered");
-        System.out.println(protectionExpirationTime.keySet());
         // If the protectionExpirationTime list contains the victim's UUID, it will cancel damages and send a message to the attacker.
         if (protectionExpirationTime.containsKey(victim.getUniqueId())) {
             event.setCancelled(true);
@@ -96,7 +106,7 @@ public class TownyWildTownEventListener implements Listener {
                 }
 
                 // Runs a Bukkit scheduler to update the bossbar progress and adds the player to the runningBossBars hashmap to remove it when entering a town.
-                BukkitTask updateProgress = new UpdateBossBarProgress(event.getPlayer().getUniqueId(), remainingTime).runTaskTimer(plugin, 0, 20);
+                BukkitTask updateProgress = new UpdateBossBarProgress(event.getPlayer(), remainingTime).runTaskTimer(plugin, 0, 20);
                 runningBossBars.put(event.getPlayer().getUniqueId(), updateProgress);
 
                 // Shows the bossbar to the player.
@@ -143,7 +153,7 @@ public class TownyWildTownEventListener implements Listener {
                     }
 
                     // Run a Bukkit scheduler to update the bossbar progress and add the player to the runningBossBars hashmap.
-                    BukkitTask updateProgress = new UpdateBossBarProgress(player.getUniqueId(), remainingTime).runTaskTimer(plugin, 0, 20);
+                    BukkitTask updateProgress = new UpdateBossBarProgress(player, remainingTime).runTaskTimer(plugin, 0, 20);
                     runningBossBars.put(player.getUniqueId(), updateProgress);
 
                     // Show the bossbar to the player.
