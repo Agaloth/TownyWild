@@ -1,13 +1,11 @@
 package com.agaloth.townywild.commands;
 
+import com.agaloth.townywild.enums.TownyWildPermissionNodes;
+import com.agaloth.townywild.settings.Settings;
 import com.palmergames.bukkit.towny.TownyMessaging;
 import com.palmergames.bukkit.towny.object.Translatable;
 import com.palmergames.bukkit.towny.utils.NameUtil;
 import com.palmergames.bukkit.util.ChatTools;
-
-import com.agaloth.townywild.enums.TownyWildPermissionNodes;
-import com.agaloth.townywild.settings.Settings;
-
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabExecutor;

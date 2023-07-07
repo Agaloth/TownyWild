@@ -1,18 +1,17 @@
 package com.agaloth.townywild.hooks;
 
-import com.agaloth.townywild.utils.MapListener;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.TimeUnit;
 
 public class TownyWildPlaceholderExpansion extends PlaceholderExpansion {
-    public static Map<UUID, Long> protectionExpirationTime = new MapListener<>();
+    public static Map<UUID, Long> protectionExpirationTime = new ConcurrentHashMap<>();
 
     public TownyWildPlaceholderExpansion() {
     }

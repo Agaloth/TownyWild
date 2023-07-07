@@ -1,18 +1,17 @@
 package com.agaloth.townywild.settings;
 
+import com.agaloth.townywild.TownyWild;
+import com.palmergames.bukkit.config.CommentedConfiguration;
+import com.palmergames.bukkit.towny.TownyAPI;
+import com.palmergames.bukkit.towny.object.TranslationLoader;
+import com.palmergames.util.FileMgmt;
+import com.palmergames.util.TimeTools;
+import org.bukkit.plugin.Plugin;
+
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-
-import com.agaloth.townywild.TownyWild;
-import com.palmergames.util.FileMgmt;
-import org.bukkit.plugin.Plugin;
-
-import com.palmergames.bukkit.config.CommentedConfiguration;
-import com.palmergames.bukkit.towny.TownyAPI;
-import com.palmergames.bukkit.towny.object.TranslationLoader;
-import com.palmergames.util.TimeTools;
 
 public class Settings {
     private static CommentedConfiguration config, newConfig = null;

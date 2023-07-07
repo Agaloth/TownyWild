@@ -6,11 +6,9 @@ import com.agaloth.townywild.hooks.TownyWildPlaceholderExpansion;
 import com.agaloth.townywild.listeners.TownyWildSiegeWarEventListener;
 import com.agaloth.townywild.listeners.TownyWildTownEventListener;
 import com.agaloth.townywild.settings.Settings;
-
 import com.palmergames.bukkit.towny.Towny;
 import com.palmergames.bukkit.util.Colors;
 import com.palmergames.bukkit.util.Version;
-
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
