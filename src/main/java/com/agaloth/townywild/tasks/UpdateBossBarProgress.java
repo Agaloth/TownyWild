@@ -67,10 +67,10 @@ public class UpdateBossBarProgress extends BukkitRunnable implements Listener {
         timeLeftBar.setStyle(BarStyle.valueOf(bossbarStyle));
 
         // If the progress hits 0, the task will be cancelled.
-        if (((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease)) == 0) {
-            timeLeftBar.setProgress(0);
-            cancel();
-        }
+        if (((float) Math.max(0.0, timeLeftBar.getProgress() - timeDecrease)) > 0) return;
+
+        timeLeftBar.setProgress(0);
+        cancel();
         // Removes the future time from the protectionExpirationTime hashmap to run the task again until the bossbar ends.
         protectionExpirationTime.remove(player.getUniqueId());
 
