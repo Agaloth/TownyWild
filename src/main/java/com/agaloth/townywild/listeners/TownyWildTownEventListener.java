@@ -55,18 +55,17 @@ public class TownyWildTownEventListener implements Listener {
         // Gets the attacking player.
         Player attacker = event.getAttackingPlayer();
 
-        System.out.println(protectionExpirationTime.values() + "values");
         // If the protectionExpirationTime list contains the victim's UUID, it will cancel damages and send a message to the attacker.
         if (protectionExpirationTime.containsKey(victim.getUniqueId())) {
             event.setCancelled(true);
-            TownyMessaging.sendMessage(attacker, Translatable.of("plugin_prefix").append(Translatable.of("victim_player_message")));
+            TownyMessaging.sendMessage(victim, Translatable.of("plugin_prefix").append(Translatable.of("victim_player_message")));
             return;
         }
 
         // If the protectionExpirationTime list contains the attacker's UUID, it will cancel damages and send a message to the player being attacked.
         if (protectionExpirationTime.containsKey(attacker.getUniqueId())) {
             event.setCancelled(true);
-            TownyMessaging.sendMessage(attacker, Translatable.of("plugin_prefix").append(Translatable.of("victim_player_message")));
+            TownyMessaging.sendMessage(attacker, Translatable.of("plugin_prefix").append(Translatable.of("attacker_player_message")));
         }
     }
 
